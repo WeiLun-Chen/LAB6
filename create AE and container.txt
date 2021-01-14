@@ -1,0 +1,3 @@
+create_AE("sm_sensor_1")
+time.sleep(2)
+create_CNT("sm_sensor_1", "sm_DATA")

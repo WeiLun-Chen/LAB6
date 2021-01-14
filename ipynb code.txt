@@ -1,0 +1,38 @@
+import requests, base64, time
+OM2M_URL = "http://127.0.0.1:8282/~"
+CSE_ID = "/mn-cse/"
+CSE_NAME = "mn-name"
+LOGIN="admin"
+PSWD="admin"
+OM2M_BASE = OM2M_URL+CSE_ID
+auth_headers = {"X-M2M-ORIGIN":LOGIN+":"+PSWD}
+# The other accepted value is application/xml
+common_headers = {"Accept": "application/json"}
+
+def create_AE(name):
+    header_ae = {"Content-Type":"application/xml;ty=2"}
+    name_ae = name
+    body_ae = """
+    <m2m:ae xmlns:m2m="http://www.onem2m.org/xml/protocols" rn="{0}">
+        <api>semantic</api>
+        <lbl>Type/semantic Category/temperature Location/home</lbl>
+        <rr>false</rr>
+    </m2m:ae>
+    """.format(name_ae)
+    response = requests.delete(OM2M_BASE+CSE_NAME+"/"+name_ae, headers={**auth_headers, **common_headers})
+    print(response)
+    response = requests.post(OM2M_BASE, data=body_ae, headers={**auth_headers, **common_headers, **header_ae})
+    print(response)
+def create_CNT(name_ae, name_cnt):
+    header_cnt = {"Content-Type":"application/xml;ty=3"}
+    body_cnt = """<m2m:cnt xmlns:m2m="http://www.onem2m.org/xml/protocols" rn="{0}"></m2m:cnt>""".format(name_cnt)
+    print(body_cnt)
+    response = requests.post(OM2M_BASE+CSE_NAME+"/"+name_ae, data=body_cnt, headers={**auth_headers, **common_headers, **header_cnt})
+    print(response)
+
+def create_CIN(name_ae, name_cnt, mode, cin):
+    header_cin = {"Content-Type":"application/xml;ty=4"}
+    body_cin = """<m2m:cin xmlns:m2m="http://www.onem2m.org/xml/protocols"><cnf>{0}</cnf><con>{1}</con></m2m:cin>""".format(mode, base64.b64encode(cin).decode("utf-8"))
+    print(body_cin)
+    response = requests.post(OM2M_BASE+CSE_NAME+"/"+name_ae+"/"+name_cnt, data=body_cin, headers={**auth_headers, **common_headers, **header_cin})
+    print(response)

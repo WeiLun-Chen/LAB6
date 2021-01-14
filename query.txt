@@ -1,0 +1,18 @@
+# query
+query1 = b"""
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX exq: <http://example.org/ns#>
+SELECT ?result
+WHERE {
+    exq:obs006 a sosa:Observation;
+        sosa:hasResult ?val
+    BIND (
+      COALESCE(
+        IF(?val >= 30, "http://127.0.0.1:8080/~/mn-cse/mn-name/LAMP_1?op=setOn&lampid=LAMP_1", 1/0),
+        IF(?val <= 25, "http://127.0.0.1:8080/~/mn-cse/mn-name/LAMP_1?op=setOff&lampid=LAMP_1", 1/0),
+        "ERROR"
+      ) AS ?result
+    )
+}
+"""
+create_CIN("sm_sensor_1", "sm_DATA", "query", query1)

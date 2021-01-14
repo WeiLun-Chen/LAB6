@@ -1,0 +1,19 @@
+# 新增觀測值 (read)
+read1 = b"""
+@prefix exq: <http://example.org/ns#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+exq:obs005 a sosa:Observation ;
+    sosa:hasResult 20 ;
+    sosa:madeBySensor exq:thermometer ;
+    sosa:observedProperty exq:Temperature ;
+    sosa:resultTime "2020-06-20T11:30:12+00:00"^^xsd:dateTimeStamp .
+
+exq:obs006 a sosa:Observation ;
+    sosa:hasResult 32 ;
+    sosa:madeBySensor exq:thermometer ;
+    sosa:observedProperty exq:Temperature ;
+    sosa:resultTime "2020-06-20T23:30:12+00:00"^^xsd:dateTimeStamp .
+"""
+create_CIN("sm_sensor_1", "sm_DATA", "read", read1)

@@ -1,0 +1,9 @@
+# 更新 (刪除) exq:obs006 觀測值
+update2 = b"""
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX exq: <http://example.org/ns#>
+
+DELETE { exq:obs006 ?property ?value } 
+WHERE { exq:obs006 ?property ?value } 
+"""
+create_CIN("sm_sensor_1", "sm_DATA", "update", update2)
